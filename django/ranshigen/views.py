@@ -7,8 +7,11 @@ class CategoryList(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['parent', 'title', 'description']
-
+    filterset_fields = {
+        'parent': ['exact', 'isnull'],
+        'title':['exact'],
+        'description':['exact']
+    }
 
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
