@@ -1,5 +1,5 @@
 from django.db import models
-from generators import *
+from ranshigen.generators import *
 
 class Category(models.Model):
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, default=None)
