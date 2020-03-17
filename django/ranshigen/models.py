@@ -6,6 +6,7 @@ class Category(models.Model):
     title = models.CharField(max_length=128)
     description = models.TextField()
     # TODO image
+    generators = models.ManyToManyField('Generator', related_name='category', through='GeneratorToCategory')
 
     def __str__(self):
         return self.title
@@ -29,3 +30,8 @@ class Generator(models.Model):
     class Meta:
         verbose_name = 'Generator'
         verbose_name_plural = 'Generators'
+
+class GeneratorToCategory(models.Model):
+    generator = models.ForeignKey('Generator', on_delete=models.CASCADE)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)
+    label = models.CharField(max_length=128)
