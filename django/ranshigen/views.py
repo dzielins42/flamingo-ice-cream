@@ -22,10 +22,10 @@ class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class GeneratorResults(APIView):
     def get(self, request, id, format=None):
-        count = int(request.query_params['count'])
         try:
             generator = Generator.objects.get(id=id)
         except Generator.DoesNotExist:
             raise Http404
+        count = int(request.query_params.get(key='count', default=10))
         result = generator.generate(count)
         return Response(result)
