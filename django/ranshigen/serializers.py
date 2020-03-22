@@ -11,7 +11,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['id', 'parent', 'title', 'description', 'generators']
+        fields = ['id', 'parent', 'title', 'description', 'image', 'generators']
 
 class GeneratorToCategorySerializer(serializers.ModelSerializer):
     class Meta:
