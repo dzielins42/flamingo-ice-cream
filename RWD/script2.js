@@ -2,8 +2,7 @@ $(function() {
 
 var mainDiv = $('#main');
 console.log(mainDiv);
-var categoriesUrl = 'http://localhost:3000';
-
+var categoriesUrl = 'http://192.168.0.115:8000'
 
     $.ajax({
         method: "GET",
@@ -16,7 +15,7 @@ var categoriesUrl = 'http://localhost:3000';
 
     function insertContent(categories) {
         console.log(categories);
-        //tutaj zrób pętlę
+       
       var cardA = $('<div class="card" style="width: 18rem;"></div>')
         .append($('<img class="card-img-top" src="https://place-hold.it/300" alt="Card image cap"></img>'))
         .append($('<div class="card-body"></div>')
@@ -32,11 +31,9 @@ var categoriesUrl = 'http://localhost:3000';
         //tutaj wykonaj połączenie Ajaxem
         $.ajax(categoriesUrl + "/categories/")
             .done(function(response){
-                console.log(response[0]); 
-                insertContent(response[0]);
-                // insertContent(response[0].parent);
-                // insertContent(response[0].title); 
-                // insertContent(response[0].description); 
+                response.forEach(element => {
+                    insertContent(element)
+                });
             })
             .fail(function(error){
                 console.log(error);
