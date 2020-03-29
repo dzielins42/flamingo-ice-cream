@@ -16,7 +16,7 @@ var categoriesUrl = 'http://192.168.0.115:8000'
     function insertContent(categories) {
         console.log(categories);
        
-      var cardA = $('<div class="card" style="width: 18rem;"></div>')
+      var cardA = $('<div class="card" style="width: 18rem"></div>')
         .append($('<img class="card-img-top" src="https://place-hold.it/300" alt="Card image cap"></img>'))
         .append($('<div class="card-body"></div>')
             .append($('<h5 class="card-title">Card title</h5>').text(categories.title))
