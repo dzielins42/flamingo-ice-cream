@@ -23,13 +23,31 @@ var categoriesUrl = 'http://192.168.0.115:8000'
             .append($('<p class="card-text">Some quick example text to build on the card title and make up the bulk of the cards content.</p>').text(categories.description))
         )
         mainDiv.append(cardA);
+       
+        cardA.on('click', function(){
+            console.log("nanana")
+            mainDiv.children().remove();
+             
+            $.ajax(categoriesUrl + "/categories?parent=" + categories.id)
+            .done(function(response){
+                response.forEach(element => {
+                    insertContent(element)
+                });
+            })
+            .fail(function(error){
+                console.log(error);
+            });
+        });
+
+        
     }
 
+   
 
 
-    function loadCategories() {
+    function loadCategories(id) {
         //tutaj wykonaj połączenie Ajaxem
-        $.ajax(categoriesUrl + "/categories/")
+        $.ajax(categoriesUrl + "/categories?parent__isnull=true")
             .done(function(response){
                 response.forEach(element => {
                     insertContent(element)
@@ -41,12 +59,4 @@ var categoriesUrl = 'http://192.168.0.115:8000'
     }
 
 loadCategories();
-    
-
-
-
-
-
 });    
-
-
