@@ -2,12 +2,12 @@ import numpy
 import xml.etree.ElementTree
 
 class Generator:
-    def generate(self, count):
+    def generate(self, count, referenceSolver):
         return None
 
-    def _getValue(self, value):
+    def _getValue(self, value, referenceSolver):
         if isinstance(value, Generator):
-            return value.generate(1)[0]
+            return value.generate(1, referenceSolver)[0]
         else:
             return str(value)
 
@@ -20,7 +20,7 @@ class RandomGenerator(Generator):
         self.v = values
         self.p = probabilities
 
-    def generate(self, count):
+    def generate(self, count, referenceSolver):
         result = list(numpy.random.choice(self.v, p=self.p, size=count))
         return result
 
@@ -33,11 +33,24 @@ class JoinGenerator(Generator):
         self.values = values
         self.separator = separator
 
-    def generate(self, count):
+    def generate(self, count, referenceSolver):
         result = []
         for i in range(count):
-            result.append(self.separator.join(self._getValue(value) for value in self.values))
+            result.append(self.separator.join(self._getValue(value, referenceSolver) for value in self.values))
         return result
+
+class ReferenceGenerator(Generator):
+    referenceId = None
+
+    def __init__(self, referenceId):
+        Generator.__init__(self)
+        self.referenceId = referenceId
+
+    def generate(self, count, referenceSolver):
+        if referenceSolver is None:
+            return [""]
+        return referenceSolver(self.referenceId, count)
+
 
 class XmlParser:
     data = {}
@@ -58,6 +71,8 @@ class XmlParser:
                 generator = self._parseSpaceJoinGenerator(element)
         elif element.tag == "join":
             generator = self._parseJoinGenerator(element)
+        elif element.tag == "reference":
+            generator = self._parseReferenceGenerator(element)
         return generator
 
     def _parseRandomGenerator(self, element):
@@ -85,6 +100,11 @@ class XmlParser:
         items = self._parseItems(element)
         values = list(map(lambda item: item['value'], items))
         return JoinGenerator(values, separator)
+
+    def _parseReferenceGenerator(self, element):
+        referenceId = element.get("id") if "id" in element.attrib else ""
+        print(referenceId)
+        return ReferenceGenerator(referenceId)
 
     def _parseItems(self, children):
         items = []

@@ -25,7 +25,10 @@ class Generator(models.Model):
     def generate(self, count=1):
         parser = XmlParser()
         generator = parser.fromString(str(self.data))
-        return generator.generate(count)
+        return generator.generate(count=count, referenceSolver=self._refSolver)
+
+    def _refSolver(self, refId, count):
+        return Generator.objects.get(id=refId).generate(count)
 
     class Meta:
         verbose_name = 'Generator'
