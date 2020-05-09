@@ -51,6 +51,21 @@ class ReferenceGenerator(Generator):
             return [""]
         return referenceSolver(self.referenceId, count)
 
+class CapitalizeGenerator(Generator):
+    value = None
+
+    def __init__(self, value):
+        Generator.__init__(self)
+        self.value = value
+
+    def generate(self, count, referenceSolver):
+        if referenceSolver is None:
+            return [""]
+        result = []
+        for i in range(count):
+            result.append(self._getValue(self.value, referenceSolver).capitalize())
+        return result
+
 
 class XmlParser:
     data = {}
@@ -73,6 +88,8 @@ class XmlParser:
             generator = self._parseJoinGenerator(element)
         elif element.tag == "reference":
             generator = self._parseReferenceGenerator(element)
+        elif element.tag == "capitalize":
+            generator = self._parseCapitalizeGenerator(element)
         return generator
 
     def _parseRandomGenerator(self, element):
@@ -105,6 +122,11 @@ class XmlParser:
         referenceId = element.get("id") if "id" in element.attrib else ""
         print(referenceId)
         return ReferenceGenerator(referenceId)
+
+    def _parseCapitalizeGenerator(self, element):
+        items = self._parseItems(element)
+        value = items[0]['value']
+        return CapitalizeGenerator(value)
 
     def _parseItems(self, children):
         items = []
