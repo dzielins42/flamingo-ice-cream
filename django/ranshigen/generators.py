@@ -21,7 +21,7 @@ class RandomGenerator(Generator):
         self.p = probabilities
 
     def generate(self, count, referenceSolver):
-        result = list(numpy.random.choice(self.v, p=self.p, size=count))
+        result = list(map(lambda item: self._getValue(item, referenceSolver), list(numpy.random.choice(self.v, p=self.p, size=count))))
         return result
 
 class JoinGenerator(Generator):
